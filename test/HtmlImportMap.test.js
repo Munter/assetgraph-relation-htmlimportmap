@@ -1,6 +1,20 @@
+const expect = require('unexpected')
+  .clone()
+  .use(require('unexpected-assetgraph'));
 const HtmlImportMap = require('../');
 const AssetGraph = require('assetgraph');
 
-AssetGraph.registerRelation(HtmlImportMap, 'HtmlImportMap');
+AssetGraph.Html.registerRelation(HtmlImportMap);
 
-describe('HtmlImportMap relation', () => {});
+describe('HtmlImportMap relation', () => {
+  it('should find an import map', async () => {
+    const graph = new AssetGraph();
+
+    await graph.loadAssets({
+      type: 'Html',
+      text: `<script type="importmap">{}</script>`
+    });
+
+    expect(graph, 'to contain relation', 'HtmlImportMap');
+  });
+});
